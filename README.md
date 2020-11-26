@@ -7,8 +7,8 @@ Bottom Drawer.
 ### 1. Add dependency
 
 ```dart
-  dependencies:
-	bottom_drawer: ^0.0.2
+dependencies:
+  bottom_drawer: ^0.0.2
 ```
 
 ### 2. Import bottom drawer
@@ -59,3 +59,4 @@ controller.close();
 ```
 
 For more information, see the [example](https://github.com/GP-Moon/bottom_drawer/tree/master/example).
+
