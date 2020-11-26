@@ -1,11 +1,17 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+/// Created by GP
+/// 2020/11/25.
+
+/// drawer controller.
 class BottomDrawerController {
+  /// open drawer.
   void open() {
     _handler?.call(true);
   }
 
+  /// close drawer.
   void close() {
     _handler?.call(false);
   }
@@ -13,6 +19,7 @@ class BottomDrawerController {
   void Function(bool open) _handler;
 }
 
+/// bottom drawer.
 class BottomDrawer extends StatefulWidget {
   BottomDrawer({
     Key key,
@@ -23,7 +30,7 @@ class BottomDrawer extends StatefulWidget {
     this.color = Colors.white,
     this.cornerRadius = 12,
     this.duration = const Duration(milliseconds: 250),
-    this.activeByDrawer = true,
+    this.followTheBody = true,
     this.controller,
     this.callback,
   });
@@ -31,20 +38,36 @@ class BottomDrawer extends StatefulWidget {
   @override
   _BottomDrawerState createState() => _BottomDrawerState();
 
+  /// drawer header.
   final Widget header;
+
+  /// drawer body.
   final Widget body;
 
+  /// drawer header height.
   final double headerHeight;
+
+  /// drawer total height.
   final double drawerHeight;
 
+  /// drawer color.
   final Color color;
+
+  /// drawer corner radius.
   final double cornerRadius;
+
+  /// drawer animation duration.
   final Duration duration;
 
-  final bool activeByDrawer;
+  ///If configured as true,
+  ///When the drawer is open, the body slides to the top, and then slides down, the drawer will automatically close.
+  ///When the drawer is closed, the body slides up and the drawer will automatically open.
+  final bool followTheBody;
 
+  /// drawer controller.
   final BottomDrawerController controller;
 
+  /// drawer status callback.
   final Function(bool opened) callback;
 }
 
@@ -53,7 +76,10 @@ class _BottomDrawerState extends State<BottomDrawer> with TickerProviderStateMix
   void initState() {
     super.initState();
 
-    animationController = AnimationController(vsync: this, duration: widget.duration);
+    animationController = AnimationController(
+      vsync: this,
+      duration: widget.duration,
+    );
 
     widget.controller?._handler = (open) {
       if (open)
@@ -94,7 +120,9 @@ class _BottomDrawerState extends State<BottomDrawer> with TickerProviderStateMix
     return Transform.translate(
       offset: Offset(0.0, offset),
       child: RawGestureDetector(
-        gestures: {VerticalDragGestureRecognizer: getRecognizer()},
+        gestures: {
+          VerticalDragGestureRecognizer: getRecognizer(),
+        },
         child: buildDrawer(),
       ),
     );
@@ -167,34 +195,31 @@ class _BottomDrawerState extends State<BottomDrawer> with TickerProviderStateMix
   }
 
   bool handleScrollNotification(Notification notification) {
-    switch (notification.runtimeType) {
-      case ScrollStartNotification:
-        ScrollStartNotification scrollNotification = notification;
-        ScrollMetrics metrics = scrollNotification.metrics;
-        scrollOffset = metrics.pixels;
-        scrollAtEdge = metrics.atEdge;
-        return true;
-      case ScrollUpdateNotification:
-        ScrollUpdateNotification scrollNotification = notification;
-        ScrollMetrics metrics = scrollNotification.metrics;
-        double pixels = metrics.pixels;
-        double flag = pixels - scrollOffset;
-        if (flag > 0 && !opened && widget.activeByDrawer) {
-          open();
-        }
-        return true;
-      case ScrollEndNotification:
-        return true;
-      case OverscrollNotification:
-        OverscrollNotification scrollNotification = notification;
-        ScrollMetrics metrics = scrollNotification.metrics;
-        double pixels = metrics.pixels;
-        double flag = pixels - scrollOffset;
-        if (scrollOffset == 0.0 && flag == 0.0 && scrollAtEdge && opened && widget.activeByDrawer) {
-          close();
-        }
-        return true;
-    }
+    if (widget.followTheBody)
+      switch (notification.runtimeType) {
+        case ScrollStartNotification:
+          ScrollStartNotification scrollNotification = notification;
+          ScrollMetrics metrics = scrollNotification.metrics;
+          scrollOffset = metrics.pixels;
+          scrollAtEdge = metrics.atEdge;
+          return true;
+        case ScrollUpdateNotification:
+          ScrollUpdateNotification scrollNotification = notification;
+          ScrollMetrics metrics = scrollNotification.metrics;
+          double pixels = metrics.pixels;
+          double flag = pixels - scrollOffset;
+          if (flag > 0 && !opened) open();
+          return true;
+        case ScrollEndNotification:
+          return true;
+        case OverscrollNotification:
+          OverscrollNotification scrollNotification = notification;
+          ScrollMetrics metrics = scrollNotification.metrics;
+          double pixels = metrics.pixels;
+          double flag = pixels - scrollOffset;
+          if (scrollOffset == 0.0 && flag == 0.0 && scrollAtEdge && opened) close();
+          return true;
+      }
     return false;
   }
 
@@ -219,9 +244,15 @@ class _BottomDrawerState extends State<BottomDrawer> with TickerProviderStateMix
 
     if (callback) widget.callback?.call(opened);
 
-    CurvedAnimation curve = new CurvedAnimation(parent: animationController, curve: Curves.easeOut);
+    CurvedAnimation curve = new CurvedAnimation(
+      parent: animationController,
+      curve: Curves.easeOut,
+    );
 
-    animation = Tween(begin: start, end: end).animate(curve)
+    animation = Tween(
+      begin: start,
+      end: end,
+    ).animate(curve)
       ..addListener(() {
         setState(() {
           offset = animation.value;

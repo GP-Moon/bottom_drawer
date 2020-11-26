@@ -1,6 +1,6 @@
 name: bottom_drawer
-description: A bottom drawer widget.
-version: 0.0.1
+description: A bottom drawer widget, support customize drawer header and body, support list body, support drag to open and close.
+version: 0.0.2
 homepage: https://github.com/GP-Moon/bottom_drawer
 
 environment:
