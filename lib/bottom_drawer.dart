@@ -16,17 +16,17 @@ class BottomDrawerController {
     _handler?.call(false);
   }
 
-  void Function(bool open) _handler;
+  void Function(bool open)? _handler;
 }
 
 /// bottom drawer.
 class BottomDrawer extends StatefulWidget {
   BottomDrawer({
-    Key key,
-    @required this.header,
-    @required this.body,
-    @required this.headerHeight,
-    @required this.drawerHeight,
+    Key? key,
+    required this.header,
+    required this.body,
+    required this.headerHeight,
+    required this.drawerHeight,
     this.color = Colors.white,
     this.cornerRadius = 12,
     this.duration = const Duration(milliseconds: 250),
@@ -65,10 +65,10 @@ class BottomDrawer extends StatefulWidget {
   final bool followTheBody;
 
   /// drawer controller.
-  final BottomDrawerController controller;
+  final BottomDrawerController? controller;
 
   /// drawer status callback.
-  final Function(bool opened) callback;
+  final Function(bool opened)? callback;
 }
 
 class _BottomDrawerState extends State<BottomDrawer> with TickerProviderStateMixin {
@@ -198,13 +198,13 @@ class _BottomDrawerState extends State<BottomDrawer> with TickerProviderStateMix
     if (widget.followTheBody)
       switch (notification.runtimeType) {
         case ScrollStartNotification:
-          ScrollStartNotification scrollNotification = notification;
+          ScrollStartNotification scrollNotification = notification as ScrollStartNotification;
           ScrollMetrics metrics = scrollNotification.metrics;
           scrollOffset = metrics.pixels;
           scrollAtEdge = metrics.atEdge;
           return true;
         case ScrollUpdateNotification:
-          ScrollUpdateNotification scrollNotification = notification;
+          ScrollUpdateNotification scrollNotification = notification as ScrollUpdateNotification;
           ScrollMetrics metrics = scrollNotification.metrics;
           double pixels = metrics.pixels;
           double flag = pixels - scrollOffset;
@@ -213,7 +213,7 @@ class _BottomDrawerState extends State<BottomDrawer> with TickerProviderStateMix
         case ScrollEndNotification:
           return true;
         case OverscrollNotification:
-          OverscrollNotification scrollNotification = notification;
+          OverscrollNotification scrollNotification = notification as OverscrollNotification;
           ScrollMetrics metrics = scrollNotification.metrics;
           double pixels = metrics.pixels;
           double flag = pixels - scrollOffset;
@@ -223,23 +223,23 @@ class _BottomDrawerState extends State<BottomDrawer> with TickerProviderStateMix
     return false;
   }
 
-  void open([bool callback]) {
+  void open([bool? callback]) {
     if (!opened) {
       double end = 0;
-      double start = offset;
+      double? start = offset;
       slide(start, end, callback ?? true);
     }
   }
 
-  void close([bool callback]) {
+  void close([bool? callback]) {
     if (opened) {
       double end = drawerHeight - headerHeight;
-      double start = offset;
+      double? start = offset;
       slide(start, end, callback ?? true);
     }
   }
 
-  void slide(double start, double end, bool callback) {
+  void slide(double? start, double end, bool callback) {
     opened = end == 0.0;
 
     if (callback) widget.callback?.call(opened);
@@ -265,17 +265,17 @@ class _BottomDrawerState extends State<BottomDrawer> with TickerProviderStateMix
 
   bool opened = false;
 
-  double headerHeight;
-  double drawerHeight;
+  late double headerHeight;
+  late double drawerHeight;
 
-  double offset;
+  double offset = 0.0;
 
-  double lastDrag;
-  double lastDragOffset;
+  late double lastDrag;
+  late double lastDragOffset;
 
-  double scrollOffset;
+  double scrollOffset = 0.0;
   bool scrollAtEdge = false;
 
-  Animation<double> animation;
-  AnimationController animationController;
+  late Animation<double> animation;
+  late AnimationController animationController;
 }

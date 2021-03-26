@@ -8,7 +8,7 @@ Bottom Drawer.
 
 ```dart
 dependencies:
-  bottom_drawer: ^0.0.2
+  bottom_drawer: ^0.0.3
 ```
 
 ### 2. Import bottom drawer

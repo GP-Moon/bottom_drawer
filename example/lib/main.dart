@@ -122,7 +122,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   List<Widget> _buildButtons(String prefix, int start, int end) {
-    List<Widget> buttons = List();
+    List<Widget> buttons = [];
     for (int i = start; i <= end; i++)
       buttons.add(TextButton(
         child: Text(

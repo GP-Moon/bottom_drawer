@@ -14,7 +14,7 @@ void main() {
     await tester.pumpWidget(MyApp());
     expect(
       find.byWidgetPredicate(
-        (Widget widget) => widget is Text && widget.data.startsWith('Pressed'),
+        (Widget widget) => widget is Text && (widget.data?.startsWith('Pressed') ?? false),
       ),
       findsOneWidget,
     );
