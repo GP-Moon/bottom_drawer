@@ -80,6 +80,14 @@ class _MyAppState extends State<MyApp> {
       drawerHeight: _bodyHeight,
       color: Colors.lightBlue,
       controller: _controller,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.15),
+          blurRadius: 60,
+          spreadRadius: 5,
+          offset: const Offset(2, -6), // changes position of shadow
+        ),
+      ],
     );
   }
 

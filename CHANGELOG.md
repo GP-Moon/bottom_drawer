@@ -1,3 +1,7 @@
+## 0.0.4
+
+* Add drawer BoxShadow.
+
 ## 0.0.3
 
 * Null safety.
