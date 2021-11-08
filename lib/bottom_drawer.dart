@@ -29,6 +29,7 @@ class BottomDrawer extends StatefulWidget {
     required this.drawerHeight,
     this.color = Colors.white,
     this.cornerRadius = 12,
+    this.boxShadow = const [],
     this.duration = const Duration(milliseconds: 250),
     this.followTheBody = true,
     this.controller,
@@ -58,6 +59,9 @@ class BottomDrawer extends StatefulWidget {
 
   /// drawer animation duration.
   final Duration duration;
+
+  /// drawer box shadow.
+  final List<BoxShadow> boxShadow;
 
   ///If configured as true,
   ///When the drawer is open, the body slides to the top, and then slides down, the drawer will automatically close.
@@ -178,6 +182,7 @@ class _BottomDrawerState extends State<BottomDrawer> with TickerProviderStateMix
             topLeft: Radius.circular(widget.cornerRadius),
             topRight: Radius.circular(widget.cornerRadius),
           ),
+          boxShadow: widget.boxShadow,
         ),
         child: Column(
           children: [
