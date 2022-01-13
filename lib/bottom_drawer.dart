@@ -275,8 +275,8 @@ class _BottomDrawerState extends State<BottomDrawer> with TickerProviderStateMix
 
   double offset = 0.0;
 
-  late double lastDrag;
-  late double lastDragOffset;
+  late double lastDrag = 0.0;
+  late double lastDragOffset = 0.0;
 
   double scrollOffset = 0.0;
   bool scrollAtEdge = false;
