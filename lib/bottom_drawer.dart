@@ -63,9 +63,9 @@ class BottomDrawer extends StatefulWidget {
   /// drawer box shadow.
   final List<BoxShadow> boxShadow;
 
-  ///If configured as true,
-  ///When the drawer is open, the body slides to the top, and then slides down, the drawer will automatically close.
-  ///When the drawer is closed, the body slides up and the drawer will automatically open.
+  /// If configured as true,
+  /// When the drawer is open, the body slides to the top, and then slides down, the drawer will automatically close.
+  /// When the drawer is closed, the body slides up and the drawer will automatically open.
   final bool followTheBody;
 
   /// drawer controller.
@@ -152,10 +152,13 @@ class _BottomDrawerState extends State<BottomDrawer> with TickerProviderStateMix
 
   void onDragStart(DragStartDetails details) {
     lastDrag = details.globalPosition.dy;
+    lastDragOffset = 0;
+    totalDragOffset = 0;
   }
 
   void onDragUpdate(DragUpdateDetails details) {
     lastDragOffset = details.globalPosition.dy - lastDrag;
+    totalDragOffset += lastDragOffset;
     offset = offset + details.delta.dy;
     lastDrag = details.globalPosition.dy;
     setState(() {});
@@ -164,8 +167,14 @@ class _BottomDrawerState extends State<BottomDrawer> with TickerProviderStateMix
   void onDragEnd(DragEndDetails details) {
     if (lastDragOffset < 0) {
       open();
-    } else {
+    } else if (lastDragOffset > 0) {
       close();
+    } else {
+      if (totalDragOffset < 0) {
+        open();
+      } else if (totalDragOffset > 0) {
+        close();
+      }
     }
   }
 
@@ -277,6 +286,7 @@ class _BottomDrawerState extends State<BottomDrawer> with TickerProviderStateMix
 
   late double lastDrag;
   late double lastDragOffset;
+  late double totalDragOffset;
 
   double scrollOffset = 0.0;
   bool scrollAtEdge = false;
