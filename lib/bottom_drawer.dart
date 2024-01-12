@@ -87,9 +87,9 @@ class _BottomDrawerState extends State<BottomDrawer> with TickerProviderStateMix
 
     widget.controller?._handler = (open) {
       if (open)
-        this.open(false);
+        this.open(widget.callback != null ? true : false);
       else
-        this.close(false);
+        this.close(widget.callback != null ? true : false);
     };
   }
 
